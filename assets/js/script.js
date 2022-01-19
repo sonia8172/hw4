@@ -151,3 +151,113 @@ var renderStartPage = function () {
             wrongEl.classList.add("hide")
             }
         }  
+
+      //display wrong! on screen
+      var answerWrong = function() {
+        if (wrongEl.className = "hide") {
+            wrongEl.classList.remove("hide")
+            wrongEl.classList.add("banner")
+            correctEl.classList.remove("banner")
+            correctEl.classList.add("hide")
+        }
+    }
+
+    //check if answer is correct    
+    var answerCheck = function(event) {
+        var selectedanswer = event.target
+            if (arrayShuffledQuestions[QuestionIndex].a === selectedanswer.innerText){
+                answerCorrect()
+                score = score + 7
+            }
+
+            else {
+              answerWrong()
+              score = score - 1;
+              timeleft = timeleft - 3;
+          };
+
+        //go to next question, check if there is more questions
+          QuestionIndex++
+            if  (arrayShuffledQuestions.length > QuestionIndex + 1) {
+                setQuestion()
+            }   
+            else {
+               gameover = "true";
+               showScore();
+                }
+    }
+
+        //Display total score screen at end of game
+    var showScore = function () {
+        containerQuestionEl.classList.add("hide");
+        containerEndEl.classList.remove("hide");
+        containerEndEl.classList.add("show");
+
+        var scoreDisplay = document.createElement("p");
+        scoreDisplay.innerText = ("Your final score is " + score + "!");
+        containerScoreEl.appendChild(scoreDisplay);
+    }       
+    
+    //create high score values
+    var createHighScore = function(event) { 
+        event.preventDefault() 
+        var initials = document.querySelector("#initials").value;
+        if (!initials) {
+          alert("Enter your intials!");
+          return;
+        }
+
+      formInitials.reset();
+
+      var HighScore = {
+      initials: initials,
+      score: score
+      } 
+
+      //push and sort scores
+      HighScores.push(HighScore);
+      HighScores.sort((a, b) => {return b.score-a.score});
+
+    //clear visibile list to resort
+    while (listHighScoreEl.firstChild) {
+       listHighScoreEl.removeChild(listHighScoreEl.firstChild)
+    }
+    //create elements in order of high scores
+    for (var i = 0; i < HighScores.length; i++) {
+      var highscoreEl = document.createElement("li");
+      highscoreEl.ClassName = "high-score";
+      highscoreEl.innerHTML = HighScores[i].initials + " - " + HighScores[i].score;
+      listHighScoreEl.appendChild(highscoreEl);
+    }
+
+      saveHighScore();
+      displayHighScores();
+
+    }
+    //save high score
+    var saveHighScore = function () {
+        localStorage.setItem("HighScores", JSON.stringify(HighScores))
+            
+    }
+
+    //load values/ called on page load
+    var loadHighScore = function () {
+        var LoadedHighScores = localStorage.getItem("HighScores")
+            if (!LoadedHighScores) {
+            return false;
+        }
+
+        LoadedHighScores = JSON.parse(LoadedHighScores);
+        LoadedHighScores.sort((a, b) => {return b.score-a.score})
+ 
+
+        for (var i = 0; i < LoadedHighScores.length; i++) {
+            var highscoreEl = document.createElement("li");
+            highscoreEl.ClassName = "high-score";
+            highscoreEl.innerText = LoadedHighScores[i].initials + " - " + LoadedHighScores[i].score;
+            listHighScoreEl.appendChild(highscoreEl);
+
+            HighScores.push(LoadedHighScores[i]);
+            
+        }
+    }  
