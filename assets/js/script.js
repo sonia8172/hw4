@@ -261,3 +261,60 @@ var renderStartPage = function () {
             
         }
     }  
+
+        //display high score screen from link or when intiials entered
+        var displayHighScores = function() {
+
+            containerHighScoresEl.classList.remove("hide");
+            containerHighScoresEl.classList.add("show");
+            gameover = "true"
+    
+            if (containerEndEl.className = "show") {
+                containerEndEl.classList.remove("show");
+                containerEndEl.classList.add("hide");
+                }
+            if (containerStartEl.className = "show") {
+                containerStartEl.classList.remove("show");
+                containerStartEl.classList.add("hide");
+                }
+                
+            if (containerQuestionEl.className = "show") {
+                containerQuestionEl.classList.remove("show");
+                containerQuestionEl.classList.add("hide");
+                }
+    
+            if (correctEl.className = "show") {
+                correctEl.classList.remove("show");
+                correctEl.classList.add("hide");
+            }
+    
+            if (wrongEl.className = "show") {
+                wrongEl.classList.remove("show");
+                wrongEl.classList.add("hide");
+                }
+            
+        }
+        //clears high scores
+        var clearScores = function () {
+            HighScores = [];
+    
+            while (listHighScoreEl.firstChild) {
+                listHighScoreEl.removeChild(listHighScoreEl.firstChild);
+            }
+    
+            localStorage.clear(HighScores);
+    
+        } 
+    
+        loadHighScore()
+            
+          //on start click, start game
+          btnStartEl.addEventListener("click", startGame)
+          //on submit button -- enter or click
+          formInitials.addEventListener("submit", createHighScore)
+          //when view high-scores is clicked
+          ViewHighScoreEl.addEventListener("click", displayHighScores)
+          //Go back button
+          btnGoBackEl.addEventListener("click", renderStartPage)
+          //clear scores button
+          btnClearScoresEl.addEventListener("click", clearScores)
